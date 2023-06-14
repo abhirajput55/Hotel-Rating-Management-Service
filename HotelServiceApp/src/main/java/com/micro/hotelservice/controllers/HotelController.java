@@ -43,15 +43,11 @@ public class HotelController {
     }
 
     @GetMapping("/getHotelById/{hotelId}")
-    public ResponseEntity<Map<String, Object>> getAllHotelById(@PathVariable String hotelId){
-        Map<String, Object> map = new HashMap<>();
+    public ResponseEntity<Hotel> getAllHotelById(@PathVariable String hotelId){
 
         Hotel hotel = hotelService.getHotelById(hotelId);
 
-        map.put("Success", true);
-        map.put("Data", hotel);
-
-        return ResponseEntity.status(HttpStatus.OK).body(map);
+        return ResponseEntity.status(HttpStatus.OK).body(hotel);
     }
 
     @PutMapping("/updateHotel")

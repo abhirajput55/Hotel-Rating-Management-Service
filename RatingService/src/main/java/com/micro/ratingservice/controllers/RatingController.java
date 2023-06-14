@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/ratings")
@@ -59,16 +56,12 @@ public class RatingController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<Map<String, Object>> getRatingByUserId(@PathVariable Integer userId){
+    public ResponseEntity<ArrayList<Rating>> getRatingByUserId(@PathVariable Integer userId){
 
-        Map<String, Object> map = new HashMap<>();
+        ArrayList<Rating> ratingList =
+                (ArrayList<Rating>) ratingService.getRatingByUser(userId);
 
-        List<Rating> ratingList = ratingService.getRatingByUser(userId);
-
-        map.put("Success", true);
-        map.put("Data", ratingList);
-
-        return ResponseEntity.status(HttpStatus.OK).body(map);
+        return ResponseEntity.status(HttpStatus.OK).body(ratingList);
     }
 
     @GetMapping("/hotels/{hotelId}")

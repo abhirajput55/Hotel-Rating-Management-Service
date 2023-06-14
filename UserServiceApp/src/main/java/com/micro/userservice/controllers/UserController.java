@@ -1,5 +1,6 @@
 package com.micro.userservice.controllers;
 
+import com.micro.userservice.entities.Hotel;
 import com.micro.userservice.entities.Rating;
 import com.micro.userservice.entities.User;
 import com.micro.userservice.services.UserService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -51,13 +53,22 @@ public class UserController {
 
         User user = userService.getUserById(userId);
 
-        HashMap<String, Object> hashMap = restTemplate
-                .getForObject("http://localhost:8083/ratings/users/" +
-                        user.getUserId(), HashMap.class);
+        Rating[] ratingArray = restTemplate.getForObject("http://localhost:8083/ratings/users/" +
+                user.getUserId(), Rating[].class);
 
-        ArrayList<Rating> ratingList = (ArrayList<Rating>) hashMap.get("Data");
+        List<Rating> ratingList = Arrays.stream(ratingArray).collect(Collectors.toList());
 
-        user.setRatings(ratingList);
+        List<Rating> ratings = ratingList.stream().map(rating -> {
+
+            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://localhost:8082/hotels/getHotelById/" +
+                    rating.getHotelId(), Hotel.class);
+
+            Hotel hotel = forEntity.getBody();
+            rating.setHotel(hotel);
+            return rating;
+        }).collect(Collectors.toList());
+
+        user.setRatings(ratings);
 
         map.put("Success", true);
         map.put("Data", user);
