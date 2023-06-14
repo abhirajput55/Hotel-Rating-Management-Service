@@ -58,7 +58,7 @@ public class RatingController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    @GetMapping("/ratingByUser/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<Map<String, Object>> getRatingByUserId(@PathVariable Integer userId){
 
         Map<String, Object> map = new HashMap<>();
@@ -71,7 +71,7 @@ public class RatingController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    @GetMapping("/ratingByHotel/{hotelId}")
+    @GetMapping("/hotels/{hotelId}")
     public ResponseEntity<Map<String, Object>> getRatingByHotelId(@PathVariable String hotelId){
 
         Map<String, Object> map = new HashMap<>();

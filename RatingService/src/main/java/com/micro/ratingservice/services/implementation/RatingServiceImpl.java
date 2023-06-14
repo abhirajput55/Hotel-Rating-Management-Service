@@ -45,7 +45,7 @@ public class RatingServiceImpl implements RatingService {
 
         List<Rating> ratingList = ratingRepository.findRatingByUserId(userId);
 
-        return null;
+        return ratingList;
     }
 
     @Override
