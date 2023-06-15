@@ -3,6 +3,8 @@ package com.micro.userservice.controllers;
 import com.micro.userservice.entities.Hotel;
 import com.micro.userservice.entities.Rating;
 import com.micro.userservice.entities.User;
+import com.micro.userservice.external.services.HotelService;
+import com.micro.userservice.external.services.RatingService;
 import com.micro.userservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,10 @@ import java.util.stream.Collectors;
 public class UserController {
     @Autowired
     UserService userService;
-
+    @Autowired
+    HotelService hotelService;
+    @Autowired
+    RatingService ratingService;
     @Autowired
     RestTemplate restTemplate;
 
@@ -53,17 +58,24 @@ public class UserController {
 
         User user = userService.getUserById(userId);
 
-        Rating[] ratingArray = restTemplate.getForObject("http://localhost:8083/ratings/users/" +
-                user.getUserId(), Rating[].class);
+//      Calling another service by using RestTeplate
+//        Rating[] ratingArray = restTemplate.getForObject("http://RATING-SERVICE/ratings/users/" +
+//                user.getUserId(), Rating[].class);
+
+        //By using Fegin Client
+        Rating[] ratingArray = ratingService.getRatingsOfUser(userId);
 
         List<Rating> ratingList = Arrays.stream(ratingArray).collect(Collectors.toList());
 
         List<Rating> ratings = ratingList.stream().map(rating -> {
+//      Calling another service by using RestTeplate
+//            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hotels/getHotelById/" +
+//                    rating.getHotelId(), Hotel.class);
+//            Hotel hotel = forEntity.getBody();
 
-            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://localhost:8082/hotels/getHotelById/" +
-                    rating.getHotelId(), Hotel.class);
+            //By using Fegin Client
+            Hotel hotel = hotelService.getHotelById(rating.getHotelId());
 
-            Hotel hotel = forEntity.getBody();
             rating.setHotel(hotel);
             return rating;
         }).collect(Collectors.toList());
