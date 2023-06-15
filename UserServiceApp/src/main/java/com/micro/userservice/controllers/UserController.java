@@ -27,7 +27,7 @@ public class UserController {
     @Autowired
     RestTemplate restTemplate;
 
-    @PostMapping("/saveUser")
+    @PostMapping("/user")
     public ResponseEntity<Map<String, Object>> createNewUser(@RequestBody User user){
 
         Map<String, Object> map = new HashMap<>();
@@ -40,7 +40,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(map);
     }
 
-    @GetMapping("getAllUsers")
+    @GetMapping("/user")
     public ResponseEntity<Map<String, Object>> getListOfAllUsers(){
         Map<String, Object> map = new HashMap<>();
 
@@ -52,7 +52,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    @GetMapping("/getUserById/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<Map<String, Object>> getUserByUserId(@PathVariable Integer userId){
         Map<String, Object> map = new HashMap<>();
 
@@ -86,5 +86,21 @@ public class UserController {
         map.put("Data", user);
 
         return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+    @GetMapping("/createRating")
+    public ResponseEntity<Map<String, Object>> createUserRating(@RequestBody Rating rating){
+
+        Map<String, Object> objectMap = new HashMap<>();
+
+        Rating rating1 = Rating.builder().userId(rating.getUserId())
+                .hotelId(rating.getHotelId()).feedback(rating.getFeedback()).build();
+
+        Map<String, Object> map = ratingService.createRating(rating1);
+
+        objectMap.put("Success", true);
+        objectMap.put("Data", map.get("Data"));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(objectMap);
     }
 }

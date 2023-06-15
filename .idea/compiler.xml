@@ -11,11 +11,13 @@
         <module name="HotelServiceApp" />
         <module name="RatingService" />
         <module name="UserServiceApp" />
+        <module name="ApiGateway" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ApiGateway" options="-parameters" />
       <module name="HotelServiceApp" options="-parameters" />
       <module name="RatingService" options="-parameters" />
       <module name="ServiceRegistry" options="-parameters" />

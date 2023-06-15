@@ -18,7 +18,7 @@ public class HotelController {
     @Autowired
     HotelService hotelService;
 
-    @PostMapping("/saveHotel")
+    @PostMapping("/hotel")
     public ResponseEntity<Map<String, Object>> createNewHotel(@RequestBody Hotel hotel){
         Map<String, Object> map = new HashMap<>();
 
@@ -30,7 +30,7 @@ public class HotelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(map);
     }
 
-    @GetMapping("/getAllHotels")
+    @GetMapping("/hotel")
     public ResponseEntity<Map<String, Object>> getAllHotels(){
         Map<String, Object> map = new HashMap<>();
 
@@ -42,7 +42,7 @@ public class HotelController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    @GetMapping("/getHotelById/{hotelId}")
+    @GetMapping("/hotel/{hotelId}")
     public ResponseEntity<Hotel> getAllHotelById(@PathVariable String hotelId){
 
         Hotel hotel = hotelService.getHotelById(hotelId);
@@ -50,7 +50,7 @@ public class HotelController {
         return ResponseEntity.status(HttpStatus.OK).body(hotel);
     }
 
-    @PutMapping("/updateHotel")
+    @PutMapping("/hotel")
     public ResponseEntity<Map<String, Object>> updateHotel(@RequestBody Hotel hotel){
         Map<String, Object> map = new HashMap<>();
 
